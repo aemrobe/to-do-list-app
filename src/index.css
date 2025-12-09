@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Josefin Sans";
+  src: url("./assets/fonts/josefin-sans/JosefinSans-VariableFont_wght.ttf");
+  font-weight: 100 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Josefin Sans";
+  src: url("./assets/fonts/josefin-sans/JosefinSans-Italic-VariableFont_wght.ttf");
+  font-weight: 100 700;
+  font-style: italic;
+}
+
+:root {
+  --color-white: #fff;
+  --color-black: #000;
+  --color-purple-800: #393a4b;
+  --color-purple-700: #4d5067;
+  --color-purple-600: #5b5373;
+  --color-purple-300: #cbcbe7;
+  --color-purple-100: #e3e4f1;
+  --color-gray-600: #9495a5;
+  --color-gray-300: #d1d2da;
+  --color-gray-50: #fafafa;
+  --color-navy-950: #171823;
+  --color-navy-900: #25273d;
+  --color-navy-850: #494c6b;
+  --color-blue-500: #3a7cfd;
+
+  /* Gradient 1 */
+  --color-gradient-1-color-1: rgba(85, 221, 255, 0.7);
+  --color-gradient-1-color-2: rgba(192, 88, 243, 0.5);
+
+  /* Gradient 2 */
+  --color-gradient-2-color-1: rgb(55, 16, 189);
+  --color-gradient-2-color-2: rgb(164, 35, 149);
+}
+
+@theme {
+  --color-purple-800: var(--color-purple-800);
+  --color-purple-700: var(--color-purple-700);
+  --color-purple-600: var(--color-purple-600);
+  --color-purple-300: var(--color-purple-300);
+  --color-purple-100: var(--color-purple-100);
+
+  --color-gray-600: var(--color-gray-600);
+  --color-gray-300: var(--color-gray-300);
+
+  --color-navy-950: var(--color-navy-950);
+  --color-navy-900: var(--color-navy-900);
+  --color-navy-850: var(--color-navy-850);
+  --color-blue-500: var(--color-blue-500);
+
+  /* Gradient 1 */
+  --color-gradient-1-color-1: var(--color-gradient-1-color-1);
+  --color-gradient-1-color-2: var(--color-gradient-1-color-2);
+
+  /* Gradient 2 */
+  --color-gradient-2-color-1: var(--color-gradient-2-color-1);
+  --color-gradient-2-color-2: var(--color-gradient-2-color-2);
+}
+
+.background-image {
+  background-image: linear-gradient(
+      135deg,
+      rgba(85, 221, 255, 0.9),
+      rgba(85, 221, 255, 0.1) 60%,
+      rgba(192, 88, 243, 0.5) 80%,
+      rgba(192, 88, 243, 0.3)
+    ),
+    url("/images/bg-mobile-light.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
