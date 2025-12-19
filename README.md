@@ -33,8 +33,8 @@ Users should be able to:
 
 ### Screenshot
 
-![](./screeonshots-of-solution/todo-app-desktop.png)
-![](./screeonshots-of-solution/todo-app-mobile.png)
+![](./screenshots-of-solution/todo-app-desktop.png)
+![](./screenshots-of-solution/todo-app-mobile.png)
 
 ### Links
 
