@@ -15,6 +15,7 @@
 }
 
 :root {
+  /* Colors */
   --color-white: #fff;
   --color-black: #000;
   --color-purple-800: #393a4b;
@@ -31,15 +32,24 @@
   --color-blue-500: #3a7cfd;
 
   /* Gradient 1 */
-  --color-gradient-1-color-1: rgba(85, 221, 255, 0.7);
-  --color-gradient-1-color-2: rgba(192, 88, 243, 0.5);
+  --color-gradient-1-color-1: rgba(85, 221, 255);
+  --color-gradient-1-color-2: rgba(192, 88, 243);
 
   /* Gradient 2 */
   --color-gradient-2-color-1: rgb(55, 16, 189);
   --color-gradient-2-color-2: rgb(164, 35, 149);
+
+  --color-page-active: var(--color-blue-500);
+
+  /* Fonts */
+  --font-josefin-sans: "Josefin Sans", sans-serif;
+
+  /* Border radius */
+  --border-radius-100: 0.3125rem;
 }
 
 @theme {
+  /* Colors */
   --color-purple-800: var(--color-purple-800);
   --color-purple-700: var(--color-purple-700);
   --color-purple-600: var(--color-purple-600);
@@ -48,11 +58,23 @@
 
   --color-gray-600: var(--color-gray-600);
   --color-gray-300: var(--color-gray-300);
+  --color-gray-50: var(--color-gray-50);
 
   --color-navy-950: var(--color-navy-950);
   --color-navy-900: var(--color-navy-900);
   --color-navy-850: var(--color-navy-850);
   --color-blue-500: var(--color-blue-500);
+
+  --color-background-primary: var(--color-background-primary);
+  --color-box-background: var(--color-box-background);
+  --color-checkbox-border: var(--color-checkbox-border);
+  --color-create-todo-text: var(--color-create-todo-text);
+  --color-todoitem-text: var(--color-todoitem-text);
+  --color-todoitem-bordercolor: var(--color-todoitem-bordercolor);
+  --color-todo-status: var(--color-todo-status);
+  --color-page-active: var(--color-page-active);
+  --color-todo-checked: var(--color-todo-checked);
+  --color-todo-hover: var(--color-todo-hover);
 
   /* Gradient 1 */
   --color-gradient-1-color-1: var(--color-gradient-1-color-1);
@@ -61,17 +83,195 @@
   /* Gradient 2 */
   --color-gradient-2-color-1: var(--color-gradient-2-color-1);
   --color-gradient-2-color-2: var(--color-gradient-2-color-2);
+
+  /* Box shadow */
+  --color-box-shadow: var(--color-box-shadow);
+
+  /* Height */
+  --spacing-100: 3.125rem;
+
+  /* Font style */
+  --font-josefin-sans: var(--font-josefin-sans);
+
+  /* Letter spacing */
+  --tracking-100: 0.0156em; /*0.25px*/
+
+  /* border radius */
+  --radius-100: var(--border-radius-100);
+
+  --shadow-3xl: 0 35px 50px -15px var(--color-box-shadow),
+    0 0 50px 0 var(--color-box-shadow);
+}
+
+.light {
+  --color-background-primary: var(--color-gray-50);
+  --color-box-background: var(--color-white);
+  --color-box-shadow: rgba(194, 195, 214, 0.5);
+  --color-checkbox-border: var(--color-purple-300);
+  --color-create-todo-text: var(--color-purple-800);
+  --color-todoitem-bordercolor: var(--color-purple-300);
+  --color-todoitem-text: var(--color-navy-850);
+  --color-todo-status: var(--color-gray-600);
+  --color-todo-checked: var(--color-gray-300);
+  --color-todo-hover: var(--color-navy-850);
+}
+
+.dark {
+  --color-background-primary: var(--color-navy-950);
+  --color-box-background: var(--color-navy-900);
+  --color-box-shadow: rgba(0, 0, 0, 0.5);
+  --color-checkbox-border: var(--color-purple-800);
+  --color-create-todo-text: var(--color-gray-600);
+  --color-todoitem-bordercolor: var(--color-purple-800);
+  --color-todoitem-text: var(--color-purple-100);
+  --color-todo-status: var(--color-purple-600);
+  --color-todo-checked: var(--color-purple-600);
+  --color-todo-hover: var(--color-purple-300);
+}
+
+body {
+  font-family: var(--font-josefin-sans);
+  line-height: 1;
+  background-color: var(--color-background-primary);
 }
 
 .background-image {
   background-image: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.2)
+    ),
+    linear-gradient(
       135deg,
-      rgba(85, 221, 255, 0.9),
+      rgba(85, 221, 255, 0.6),
+      rgba(85, 221, 255, 0.5) 20%,
       rgba(85, 221, 255, 0.1) 60%,
-      rgba(192, 88, 243, 0.5) 80%,
+      rgba(192, 88, 243, 0.4) 80%,
       rgba(192, 88, 243, 0.3)
     ),
     url("/images/bg-mobile-light.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.dark .background-image {
+  background-image: linear-gradient(
+      135deg,
+      rgba(55, 16, 189, 0.2),
+      rgba(164, 35, 149, 0.2)
+    ),
+    url("/images/bg-mobile-dark.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.checkmark-circle {
+  transition: all 0.2s ease;
+}
+
+.hidden-checkbox:checked + .custom-checkbox-container .checkmark-circle {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    linear-gradient(
+      135deg,
+      var(--color-gradient-1-color-1) 20%,
+      var(--color-gradient-1-color-2) 80%,
+      var(--color-gradient-1-color-2) 100%
+    );
+
+  border: transparent;
+}
+
+.hidden-checkbox:checked + .custom-checkbox-container .checkmark-circle::after {
+  content: url("/images/icon-check-light.svg");
+  transform: scale(0.8);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dark {
+  .hidden-checkbox:checked
+    + .custom-checkbox-container
+    .checkmark-circle::after {
+    content: url("/images/icon-check-dark.svg");
+  }
+}
+
+@media (min-width: 48rem) {
+  .hidden-checkbox:checked
+    + .custom-checkbox-container
+    .checkmark-circle::after {
+    content: url("/images/icon-check-light.svg");
+    transform: scale(1);
+    transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .dark {
+    .hidden-checkbox:checked
+      + .custom-checkbox-container
+      .checkmark-circle::after {
+      content: url("images/icon-check-light.svg");
+    }
+  }
+
+  .background-image {
+    background-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.2)
+      ),
+      linear-gradient(
+        135deg,
+        rgba(85, 221, 255, 0.8),
+        rgba(85, 221, 255, 0.3) 40%,
+        rgba(85, 221, 255, 0.1) 60%,
+        rgba(192, 88, 243, 0.3) 80%,
+        rgba(192, 88, 243, 0.8)
+      ),
+      url("/images/bg-desktop-light.jpg");
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top center;
+  }
+
+  .dark {
+    .background-image {
+      background-image: linear-gradient(
+          135deg,
+          rgba(55, 16, 189, 0.2),
+          rgba(164, 35, 149, 0.4) 50%,
+          rgba(164, 35, 149, 0.1) 80%,
+          rgba(164, 35, 149, 0.8)
+        ),
+        url("/images/bg-desktop-dark.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: left;
+    }
+  }
+}
+
+@media (hover: hover) {
+  .custom-checkbox-container:hover .checkmark-circle {
+    border: 1px solid transparent;
+    background: linear-gradient(
+          var(--color-box-background),
+          var(--color-box-background)
+        )
+        padding-box,
+      linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)) border-box,
+      linear-gradient(
+          135deg,
+          var(--color-gradient-1-color-1) 20%,
+          var(--color-gradient-1-color-2) 80%,
+          var(--color-gradient-1-color-2) 100%
+        )
+        border-box;
+  }
+}
+
+@media (hover: hover) {
+  .btn-hover:hover {
+    color: var(--color-todo-hover);
+    transition: color 0.2s ease;
+  }
 }

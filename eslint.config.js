@@ -7,17 +7,10 @@ import pluginReactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 
 export default [
-  // 1. Ignore Configuration
-  // The first object defines files/folders to ignore.
   { ignores: ["node_modules/", "dist/", ".vite/", "build/"] },
-
-  // 2. Main JavaScript/JSX Configuration
   {
-    // Target JavaScript and JSX files
     files: ["**/*.{js,mjs,cjs,jsx}"],
-
     languageOptions: {
-      // Set the JavaScript version to latest
       ecmaVersion: "latest",
       sourceType: "module",
       parserOptions: {
@@ -26,12 +19,10 @@ export default [
         },
       },
       globals: {
-        // Include browser-specific global variables (like window, document)
-        ...globals.browser,
+        ...globals.browser, // Include browser-specific global variables
+        // If you also have Node.js code, you might add: ...globals.node
       },
     },
-
-    // Map imported plugins to short keys for use in rules/configs
     plugins: {
       js: pluginJs,
       react: pluginReact,
@@ -40,52 +31,35 @@ export default [
       "jsx-a11y": pluginJsxAlly,
     },
 
-    // Settings object for plugins to know about the environment
+    // Settings for plugins, particularly important for 'eslint-plugin-react'
     settings: {
       react: {
         version: "detect", // Automatically detect the React version
       },
-      // Note: The 'jsx' setting is typically managed by the plugins themselves
-      // and might not be needed explicitly here in modern configs.
-
-      // This is generally for 'eslint-plugin-import', which you haven't installed,
-      // but keeping it here for future use if you decide to add it.
+      jsx: {
+        runtime: "automatic", // Use the new JSX transform (React 17+)
+      },
       "import/resolver": {
         node: {
-          extensions: [".js", ".jsx", ".mjs"],
+          extensions: [".js", ".jsx", ".mjs"], // Add file extensions your project uses
         },
       },
     },
 
-    // Define Rules
     rules: {
-      // Apply recommended base rules from included plugins
       ...pluginJs.configs.recommended.rules,
       ...pluginReact.configs.recommended.rules,
       ...pluginReactHooks.configs.recommended.rules,
       ...pluginJsxAlly.configs.recommended.rules,
 
-      // Custom Rule Overrides:
-
-      // Turn off rules related to the old JSX transform (since React 17+ uses the new transform)
+      //Turn off urles related to the old JSX transform
       "react/react-in-jsx-scope": "off",
       "react/jsx-uses-react": "off",
 
-      // Disable the Prop Types rule (common in modern React with TypeScript/Flow)
-      "react/prop-types": "off",
-
-      // Warning for unused variables, but allow declaration
-      "no-unused-vars": "warn",
-      "no-undef": "error", // Error on usage of undeclared variables
-
-      // Warn for console logs, but allow console.warn and console.error
+      "react/prop-types": "off", // Disable the rule of prop types
+      "no-unused-vars": "warn", //warn about unsued variables
+      "no-undef": "error",
       "no-console": ["warn", { allow: ["warn", "error"] }],
-
-      // Add the essential rule for React Refresh/Fast Refresh (for development)
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
     },
   },
 ];

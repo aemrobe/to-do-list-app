@@ -1,0 +1,87 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Box from "../ui/box";
+import CloseBtn from "../ui/CloseBtn";
+import { useDeleteTodo } from "./useDeleteTodo";
+import { editTodo as editTodoApi } from "../../services/apiTodos";
+import toast from "react-hot-toast";
+import { useState } from "react";
+
+function TodoItem({ task, index }) {
+  const { isDeleting, deleteTodo } = useDeleteTodo();
+  const [checked, setChecked] = useState(task.isCompleted);
+
+  const initialIsCompleted = task.isCompleted;
+
+  const queryClient = useQueryClient();
+
+  function handleToggle(e) {
+    const newStatus = e.target.checked;
+    setChecked(newStatus);
+    editTodo({
+      newTodo: {
+        isCompleted: newStatus,
+      },
+      id: task.id,
+    });
+  }
+
+  const { mutate: editTodo } = useMutation({
+    mutationFn: ({ newTodo, id }) => editTodoApi(newTodo, id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["todos"],
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+      setChecked(initialIsCompleted);
+      toast.error("The todo item couldn't be edited");
+    },
+  });
+
+  return (
+    <li>
+      <Box
+        className={`to-do-list-item border-b border-b-todoitem-bordercolor ${
+          index === 0 ? "rounded-t-100" : ""
+        } flex gap-4`}
+        padding={"px-5 py-4 md:p-6"}
+      >
+        <input
+          type="checkbox"
+          name="to-do-list"
+          id={task.id}
+          checked={checked}
+          onChange={handleToggle}
+          disabled={isDeleting}
+          className="absolute top-0 bottom-0 right-0 left-0 h-0 w-0 opacity-0 hidden-checkbox "
+        />
+
+        <label
+          className={`cursor-pointer custom-checkbox-container flex items-center gap-4 w-full min-w-0`}
+          htmlFor={task.id}
+        >
+          <span className="checkmark-circle shrink-0 w-5 h-5 md:w-6 md:h-6 border border-checkbox-border rounded-full flex items-center justify-center"></span>
+
+          <span
+            className={`todo-text-span min-w-0 wrap-break-word flex-auto text-xs md:text-lg   ${
+              checked ? "text-todo-checked line-through" : "text-todoitem-text"
+            }`}
+          >
+            {task.content}
+          </span>
+        </label>
+
+        <CloseBtn
+          className={"ml-1.5 shrink-0"}
+          onClick={() => {
+            console.log("delete todo");
+            deleteTodo(task.id);
+          }}
+        />
+      </Box>
+    </li>
+  );
+}
+
+export default TodoItem;
