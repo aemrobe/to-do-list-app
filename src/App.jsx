@@ -1,19 +1,20 @@
 import { useEffect } from "react";
-import MoonIcon from "./Components/icons/MoonIcon";
-import Box from "./Components/ui/box";
-import { useSettings } from "./Context/SettingContext";
-import SunIcon from "./Components/icons/SunIcon";
-import TodoItem from "./Components/todos/TodoItem";
-import { useTodos } from "./Components/todos/useTodos";
+import MoonIcon from "./components/icons/MoonIcon";
+import Box from "./components/ui/Box";
+import { useSettings } from "./context/SettingContext";
+import SunIcon from "./components/icons/SunIcon";
+import TodoItem from "./components/todos/TodoItem";
+import { useTodos } from "./components/todos/useTodos";
 import { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
-import { useCreateTodo } from "./Components/todos/useCreateTodo";
-import ErrorFallback from "./Components/ui/ErrorFallback";
-import Loader from "./Components/ui/Loader";
-import { useDeleteCompletedTodos } from "./Components/todos/useDeleteCompletedTodos";
-import { useFilter } from "./Context/FilterContext";
-import FilterBtn from "./Components/ui/FilterBtn";
+import { useCreateTodo } from "./components/todos/useCreateTodo";
+import ErrorFallback from "./components/ui/ErrorFallback";
+import Loader from "./components/ui/Loader";
+import { useDeleteCompletedTodos } from "./components/todos/useDeleteCompletedTodos";
+import { useFilter } from "./context/FilterContext";
+import FilterBtn from "./components/ui/FilterBtn";
+import { useAnnouncer } from "./context/AnnounceContext";
 
 function App() {
   const { colorTheme, setColorTheme } = useSettings();
@@ -23,6 +24,8 @@ function App() {
   const { handleSubmit, register, reset } = useForm();
 
   const { todos, isLoading, error } = useTodos();
+
+  const { announce } = useAnnouncer();
 
   const { filter } = useFilter();
 
@@ -54,10 +57,6 @@ function App() {
     [colorTheme]
   );
 
-  if (error) return <ErrorFallback error={error} />;
-
-  if (isLoading) return <Loader />;
-
   let filteredTodos;
 
   //### filtered todo items ###
@@ -67,21 +66,49 @@ function App() {
   if (filter === "completed")
     filteredTodos = todos?.filter((task) => task.isCompleted);
 
+  useEffect(
+    function () {
+      if (!isLoading && todos?.length > 0 && filteredTodos?.length === 0) {
+        announce(`No tasks found for ${filter} filter.`);
+      }
+
+      if (!isLoading && todos?.length === 0) {
+        announce("Your todo list is completly empty.");
+      }
+    },
+    [announce, isLoading, filteredTodos?.length, todos?.length, filter]
+  );
+
+  if (error) return <ErrorFallback error={error} />;
+
+  if (isLoading) return <Loader />;
+
   //### not completed todo items ###
   const activeTodosCount = todos?.filter((todo) => !todo.isCompleted).length;
+
+  const completedTodos = todos?.filter((todo) => todo.isCompleted).length;
 
   return (
     <>
       <div className="background-image h-50 md:h-75 pt-12 px-6">
-        <div className="max-w-md md:max-w-[33.75rem] md:w-[75.4%] mx-auto flex justify-between items-center h-5 md:h-[1.875rem] mb-10 md:mb-12 ">
-          <h1 className="font-bold font-josefin-sans tracking-[0.5em]  uppercase text-white text-2xl md:text-4xl ">
+        <div className="max-w-md md:max-w-135 md:w-[75.4%] mx-auto flex justify-between items-center h-5 md:h-7.5 mb-10 md:mb-12 ">
+          <h1
+            id="todo-heading"
+            tabIndex="-1"
+            className="focus:outline-none font-bold font-josefin-sans tracking-[0.5em]  uppercase text-white text-2xl md:text-4xl "
+          >
             todo
           </h1>
 
           <button
+            aria-label={`Switch to ${
+              colorTheme === "light" ? "dark mode" : "light mode"
+            }`}
             onClick={() =>
               setColorTheme(colorTheme === "light" ? "dark" : "light")
             }
+            className="border-none focus-visible:outline-2      focus-visible:outline-todo-hover
+            focus-visible:outline-offset-4 "
           >
             {colorTheme === "light" ? (
               <MoonIcon width={"w-5 md:w-[1.625rem]"} />
@@ -91,7 +118,7 @@ function App() {
           </button>
         </div>
 
-        <div className="max-w-md md:max-w-[33.75rem]  md:w-[75.4%]  mx-auto">
+        <div className="max-w-md md:max-w-135  md:w-[75.4%]  mx-auto">
           <form action="#" onSubmit={handleSubmit(onSubmit, onError)}>
             <Box
               className={
@@ -104,7 +131,7 @@ function App() {
                  shrink-0 rounded-full w-5 h-5 md:w-6 md:h-6"
                 htmlFor={"create-todo"}
               >
-                <span className="sr-only">create to do</span>
+                <span className="sr-only">create to do item</span>
               </label>
 
               <input
@@ -112,7 +139,7 @@ function App() {
                 name="content"
                 disabled={isCreating}
                 id="create-todo"
-                className="md:text-lg self-stretch min-w-0 placeholder:text-xs md:placeholder:text-lg -tracking-100 placeholder:text-gray-600 text-create-todo-text caret-blue-500 focus:outline-none flex-auto"
+                className="focus:outline-none md:text-lg self-stretch min-w-0 placeholder:text-xs md:placeholder:text-lg -tracking-100 placeholder:text-gray-600 text-create-todo-text caret-blue-500  flex-auto"
                 placeholder="Create a new todo..."
                 {...register("content", {
                   required: "This field is required",
@@ -134,7 +161,17 @@ function App() {
               }
               padding={"px-5 py-4 md:p-6"}
             >
-              <p>{activeTodosCount} items left</p>
+              <p aria-live={"polite"} aria-atomic="true">
+                <span aria-hidden="true">
+                  {activeTodosCount} {activeTodosCount === 1 ? "item" : "items"}{" "}
+                  left
+                </span>
+
+                <span className="sr-only">
+                  {activeTodosCount} uncompleted{" "}
+                  {activeTodosCount === 1 ? "task" : "tasks"} left`
+                </span>
+              </p>
 
               <Box className="hidden  font-bold  md:flex space-x-4 justify-center  ">
                 <FilterBtn filterType={"all"}> All</FilterBtn>
@@ -146,15 +183,20 @@ function App() {
 
               <button
                 disabled={isDeletingCompletedTodos}
-                onClick={() => deleteCompletedTodos()}
-                className="cursor-pointer btn-hover"
+                onClick={() => {
+                  if (!completedTodos) return;
+                  deleteCompletedTodos();
+                }}
+                className="focus-visible:outline-2 focus-visible:outline-todo-hover
+            focus-visible:outline-offset-4 cursor-pointer btn-hover"
+                aria-label="Clear all completed tasks"
               >
                 Clear Completed
               </button>
             </Box>
           </div>
 
-          <Box className="shadow-3xl text-todo-status text-sm -tracking-100 rounded-100 font-bold flex md:hidden space-x-4 justify-center py-[1.0625rem] mt-4">
+          <Box className="shadow-3xl text-todo-status text-sm -tracking-100 rounded-100 font-bold flex md:hidden space-x-4 justify-center py-4.25 mt-4">
             <FilterBtn filterType={"all"}> All</FilterBtn>
 
             <FilterBtn filterType={"active"}> Active</FilterBtn>
@@ -176,6 +218,12 @@ function App() {
         }}
         toastOptions={{
           duration: 3000,
+
+          ariaProps: {
+            role: "status",
+            "aria-live": "polite",
+            "aria-relevant": "all",
+          },
 
           style: {
             fontSize: "1rem",

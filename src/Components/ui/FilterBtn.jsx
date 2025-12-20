@@ -1,13 +1,18 @@
-import { useFilter } from "../../Context/FilterContext";
+import { useFilter } from "../../context/FilterContext";
 
 function FilterBtn({ children, filterType }) {
   const { filter, setFilter } = useFilter();
 
+  const isActive = filter === filterType;
+
   return (
     <button
-      className={`cursor-pointer btn-hover ${
-        filter === filterType ? "text-page-active" : ""
-      }`}
+      aria-pressed={isActive}
+      className={`focus-visible:outline-2      focus-visible:outline-todo-hover
+            focus-visible:outline-offset-4 cursor-pointer btn-hover ${
+              filter === filterType ? "text-page-active" : ""
+            }`}
+      aria-label={`Show ${filterType} tasks`}
       onClick={() => setFilter(filterType)}
     >
       {children}

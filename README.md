@@ -55,7 +55,7 @@ Users should be able to:
 ### What I learned
 
 This is my first frontendmentor challenge which i have used to implement fullstack app and i am really excitied about it.
-I have learned how i can create a database tables in supabase and connect it to my react app and also i have learned how i can make crud operation on database using react query so it was too much fun to build it.
+I have learned how i can create a database tables in supabase and connect it to my react app and also i have learned how i can make crud operation on database using react query so it was too much fun to build it. It also helped me to know how i can make app accessible to the screen reader users.
 
 ### Continued development
 
