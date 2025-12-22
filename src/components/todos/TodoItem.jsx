@@ -1,18 +1,15 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Box from "../ui/Box";
 import CloseBtn from "../ui/CloseBtn";
 import { useDeleteTodo } from "./useDeleteTodo";
-import { editTodo as editTodoApi } from "../../services/apiTodos";
-import toast from "react-hot-toast";
+
 import { useState } from "react";
+import { useEditTodo } from "./useEditTodo";
 
 function TodoItem({ task, index }) {
   const { isDeleting, deleteTodo } = useDeleteTodo();
   const [checked, setChecked] = useState(task.isCompleted);
 
   const initialIsCompleted = task.isCompleted;
-
-  const queryClient = useQueryClient();
 
   function handleToggle(e) {
     const newStatus = e.target.checked;
@@ -25,19 +22,7 @@ function TodoItem({ task, index }) {
     });
   }
 
-  const { mutate: editTodo } = useMutation({
-    mutationFn: ({ newTodo, id }) => editTodoApi(newTodo, id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["todos"],
-      });
-    },
-    onError: (error) => {
-      console.error(error);
-      setChecked(initialIsCompleted);
-      toast.error("The todo item couldn't be edited");
-    },
-  });
+  const { editTodo } = useEditTodo(setChecked, initialIsCompleted);
 
   return (
     <li>
@@ -74,6 +59,7 @@ function TodoItem({ task, index }) {
         </label>
 
         <CloseBtn
+          index={index}
           ariaText={task.content}
           className={"ml-1.5 shrink-0"}
           onClick={() => {

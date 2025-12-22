@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import MoonIcon from "./components/icons/MoonIcon";
 import Box from "./components/ui/Box";
 import { useSettings } from "./context/SettingContext";
@@ -29,6 +29,8 @@ function App() {
 
   const { filter } = useFilter();
 
+  const heading = useRef();
+
   const { isDeletingCompletedTodos, deleteCompletedTodos } =
     useDeleteCompletedTodos();
 
@@ -49,6 +51,15 @@ function App() {
   const onError = function (err) {
     console.error("form submission error", err);
   };
+
+  useEffect(
+    function () {
+      if ((heading.current, !isLoading)) {
+        heading.current.focus();
+      }
+    },
+    [isLoading]
+  );
 
   useEffect(
     function () {
@@ -81,7 +92,7 @@ function App() {
 
   if (error) return <ErrorFallback error={error} />;
 
-  // if (isLoading) return <Loader />;
+  if (isLoading) return <Loader />;
 
   //### not completed todo items ###
   const activeTodosCount = todos?.filter((todo) => !todo.isCompleted).length;
@@ -93,6 +104,7 @@ function App() {
       <main className="background-image h-50 md:h-75 pt-12 px-6">
         <div className="max-w-md md:max-w-135 md:w-[75.4%] mx-auto flex justify-between items-center h-5 md:h-7.5 mb-10 md:mb-12 ">
           <h1
+            ref={heading}
             id="todo-heading"
             tabIndex="-1"
             className="focus:outline-none font-bold font-josefin-sans tracking-[0.5em]  uppercase text-white text-2xl md:text-4xl "
@@ -126,16 +138,15 @@ function App() {
               }
               padding={"py-3.5 px-6 md:py-5 md:px-6"}
             >
-              <label
+              <span
                 className="border border-checkbox-border 
                  shrink-0 rounded-full w-5 h-5 md:w-6 md:h-6"
                 htmlFor={"create-todo"}
-              >
-                <span className="sr-only">create to do item</span>
-              </label>
+              ></span>
 
               <input
                 type="text"
+                aria-label="create a new todo item"
                 name="content"
                 disabled={isCreating}
                 id="create-todo"
@@ -161,15 +172,10 @@ function App() {
               }
               padding={"px-5 py-4 md:p-6"}
             >
-              <p aria-live={"polite"} aria-atomic="true">
-                <span aria-hidden="true">
+              <p>
+                <span>
                   {activeTodosCount} {activeTodosCount === 1 ? "item" : "items"}{" "}
                   left
-                </span>
-
-                <span className="sr-only">
-                  {activeTodosCount} uncompleted{" "}
-                  {activeTodosCount === 1 ? "task" : "tasks"} left`
                 </span>
               </p>
 
