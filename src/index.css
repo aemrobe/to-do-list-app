@@ -208,7 +208,7 @@ body {
     .hidden-checkbox:checked
       + .custom-checkbox-container
       .checkmark-circle::after {
-      content: url("images/icon-check-light.svg");
+      content: url("/images/icon-check-light.svg");
     }
   }
 
