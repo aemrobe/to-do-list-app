@@ -77,7 +77,6 @@ function TodoItem({ task, index }) {
           ariaText={task.content}
           className={"ml-1.5 shrink-0"}
           onClick={() => {
-            console.log("delete todo");
             deleteTodo(task.id);
           }}
         />
