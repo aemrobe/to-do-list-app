@@ -81,7 +81,7 @@ function App() {
 
   if (error) return <ErrorFallback error={error} />;
 
-  if (isLoading) return <Loader />;
+  // if (isLoading) return <Loader />;
 
   //### not completed todo items ###
   const activeTodosCount = todos?.filter((todo) => !todo.isCompleted).length;
@@ -90,7 +90,7 @@ function App() {
 
   return (
     <>
-      <div className="background-image h-50 md:h-75 pt-12 px-6">
+      <main className="background-image h-50 md:h-75 pt-12 px-6">
         <div className="max-w-md md:max-w-135 md:w-[75.4%] mx-auto flex justify-between items-center h-5 md:h-7.5 mb-10 md:mb-12 ">
           <h1
             id="todo-heading"
@@ -150,7 +150,7 @@ function App() {
 
           <div className="mt-4 md:mt-6 shadow-3xl rounded-b-100">
             <ul>
-              {filteredTodos.map((task, index) => (
+              {filteredTodos?.map((task, index) => (
                 <TodoItem key={task.id} task={task} index={index} />
               ))}
             </ul>
@@ -208,7 +208,7 @@ function App() {
             Drag and drop to reorder list
           </p>
         </div>
-      </div>
+      </main>
 
       <Toaster
         position="top-center"
