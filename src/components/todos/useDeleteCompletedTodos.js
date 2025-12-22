@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCompletedTodos as deleteCompletedTodosApi } from "../../services/apiTodos";
 import toast from "react-hot-toast";
-import { useAnnouncer } from "../../context/AnnounceContext";
+import { useAnnouncer } from "../../context/AnnounceProvider";
 
 export function useDeleteCompletedTodos() {
   const queryClient = useQueryClient();

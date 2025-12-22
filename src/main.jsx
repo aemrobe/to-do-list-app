@@ -7,7 +7,7 @@ import App from "./App.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import { AnnounceProvider } from "./context/AnnounceContext.jsx";
+import { AnnounceProvider } from "./context/AnnounceProvider.jsx";
 import { FilterProvider } from "./context/FilterContext.jsx";
 import { SettingProvider } from "./context/SettingContext.jsx";
 

@@ -14,7 +14,7 @@ import Loader from "./components/ui/Loader";
 import { useDeleteCompletedTodos } from "./components/todos/useDeleteCompletedTodos";
 import { useFilter } from "./context/FilterContext";
 import FilterBtn from "./components/ui/FilterBtn";
-import { useAnnouncer } from "./context/AnnounceContext";
+import { useAnnouncer } from "./context/AnnounceProvider";
 
 function App() {
   const { colorTheme, setColorTheme } = useSettings();
