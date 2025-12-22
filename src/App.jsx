@@ -172,7 +172,7 @@ function App() {
               }
               padding={"px-5 py-4 md:p-6"}
             >
-              <p>
+              <p aria-live="polite" aria-atomic="true">
                 <span>
                   {activeTodosCount} {activeTodosCount === 1 ? "item" : "items"}{" "}
                   left
