@@ -12,7 +12,6 @@ function FilterBtn({ children, filterType }) {
             focus-visible:outline-offset-4 cursor-pointer btn-hover ${
               filter === filterType ? "text-page-active" : ""
             }`}
-      aria-label={`Show ${filterType} tasks`}
       onClick={() => setFilter(filterType)}
     >
       {children}
